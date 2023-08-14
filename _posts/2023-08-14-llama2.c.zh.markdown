@@ -1,0 +1,51 @@
+---
+layout: post
+title:  "custom tokenizer"
+date:   2023-08-14 14:48:11 +0800
+categories: jekyll update
+---
+
+
+`Modify vocabulary`
+
+As shown below, the original llama2-en mainly sample with english corpus, and llama2_ enzh forms a new 52k vocabulary by adding Chinese corpus statistics and merging the original vocabulary.
+
+The number of tokens consumed by encoding a sentence s using the original llama2-en vocabulary is 57, but the expanded llama2_ enzh vocabulary encoding same sentence s only need 19 tokens. So, when the original vocabulary does not involve the current scene corpus, expanding the vocabulary may be a good choice.
+
+{% highlight ruby %}
+from sentencepiece import SentencePieceProcessor
+sp_model_llama2 = SentencePieceProcessor(model_file="tokenizers/llama2en/tokenizer.model")
+sp_model_llamaenzh = SentencePieceProcessor(model_file="tokenizers/llama2enzh/tokenizer.model")
+sp_model_baichaun = SentencePieceProcessor(model_file="tokenizers/baichuan/tokenizer.model")
+s = "从前，有一个小女孩，名叫莉莉。她喜欢在外面玩耍，欣赏美丽的花朵。"
+
+llama2_en = sp_model_llama2.encode(s)
+baichuan_enzh = sp_model_baichaun.encode(s)
+llama2_enzh = sp_model_llamaenzh.encode(s)
+
+print(f"llama2_en={len(llama2_en)}, llama2_enzh={len(llama2_enzh)} baichuan-enzh={len(baichuan_enzh)}")
+print(f"llama2_en={sp_model_llama2.vocab_size()}, llama2_enzh={sp_model_llamaenzh.vocab_size()} \
+      baichuan-enzh={sp_model_baichaun.vocab_size()}")
+print("llama2_en",llama2_en)
+print("llama2_enzh",llama2_enzh)
+print(f"#tokens used when encode a zh-token, llam2-en={len(llama2_en)/len(s):.2}, llama2_enzh={len(llama2_enzh)/len(s):.2}")
+#-----------------------------------
+llama2_en=57, llama2_enzh=19 baichuan-enzh=23
+llama2_en=32000, llama2_enzh=55296       baichuan-enzh=64000
+llama2_en [29871, 31594, 30658, 30214, 30417, 30287, 30502, 30446, 30647, 232, 176, 172, 30214, 30548, 232, 146, 174, 235, 145, 140, 235, 145, 140, 30267, 232, 168, 188, 31823, 233, 175, 165, 30505, 31066, 30806, 234, 145, 172, 235, 131, 144, 30214, 233, 175, 166, 235, 184, 146, 30630, 231, 187, 192, 30210, 30830, 233, 159, 184, 30267]
+llama2_enzh [29871, 40870, 30214, 32952, 41677, 30214, 40148, 34595, 34595, 30267, 32008, 32123, 40729, 42754, 30214, 35186, 37973, 46892, 30267]
+#tokens used when encode a zh-token, llam2-en=1.8, llama2_enzh=0.59
+{% endhighlight %}
+
+
+You can refer to the resources to prepare a customized vocabulary, and then start training from scratch.
+
+**new vocab**：https://huggingface.co/docs/tokenizers/pipeline
+
+**extend vocab**：[sentencepiece add new vocab](https://github.com/google/sentencepiece/blob/9cf136582d9cce492ba5a0cfb775f9e777fe07ea/python/add_new_vocab.ipynb)
+
+**reduce vocan**：
+ - [Reducing the SentencePiece Vocabulary Size of Pretrained NLP Models](https://blog.ceshine.net/post/trim-down-sentencepiece-vocabulary/) 
+
+ - [toknizer reduce](https://github.com/bojone/t5_in_bert4keras/blob/6cf50dbf3ffd3b4e9f36a59ee9f98356cf686de0/tokenizer/reduce.py)
+
