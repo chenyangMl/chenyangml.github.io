@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>贪吃蛇小游戏</title>
+    <style>
+        #game-board {
+            border: 1px solid black;
+            width: 400px;
+            height: 400px;
+            position: relative;
+        }
+
+        .snake-dot {
+            width: 20px;
+            height: 20px;
+            background-color: #000;
+            position: absolute;
+        }
+
+        .food-dot {
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-board"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gameBoard = document.getElementById('game-board');
+            const boardSize = 20;
+            const dotSize = 20;
+            const initialSnakeLength = 4;
+            const snakeSpeed = 200;
+            const directions = {
+                ArrowUp: { x: 0, y: -1 },
+                ArrowDown: { x: 0, y: 1 },
+                ArrowLeft: { x: -1, y: 0 },
+                ArrowRight: { x: 1, y: 0 }
+            };
+
+            let snake = [{ x: 10, y: 10 }];
+            let food = { x: 5, y: 5 };
+            let direction = directions.ArrowRight;
+            let intervalId = null;
+
+            function createDot(x, y, className) {
+                const dot = document.createElement('div');
+                dot.className = className;
+                dot.style.left = `${x * dotSize}px`;
+                dot.style.top = `${y * dotSize}px`;
+                return dot;
+            }
+
+            function drawSnake() {
+                gameBoard.innerHTML = '';
+
+                snake.forEach((dot) => {
+                    const snakeDot = createDot(dot.x, dot.y, 'snake-dot');
+                    gameBoard.appendChild(snakeDot);
+                });
+            }
+
+            function drawFood() {
+                const foodDot = createDot(food.x, food.y, 'food-dot');
+                gameBoard.appendChild(foodDot);
+            }
+
+            function moveSnake() {
+                const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
+                snake.unshift(head);
+
+                if (head.x === food.x && head.y === food.y) {
+                    food = {
+                        x: Math.floor(Math.random() * boardSize),
+                        y: Math.floor(Math.random() * boardSize)
+                    };
+                } else {
+                    snake.pop();
+                }
+            }
+
+            function handleKeydown(event) {
+                const newDirection = directions[event.key];
+
+                if (newDirection) {
+                    if (direction.x + newDirection.x !== 0 || direction.y + newDirection.y !== 0) {
+                        direction = newDirection;
+                    }
+                }
+            }
+
+            function checkCollision() {
+                const head = snake[0];
+
+                if (
+                    head.x < 0 ||
+                    head.x >= boardSize ||
+                    head.y < 0 ||
+                    head.y >= boardSize ||
+                    snake.slice(1).some((dot) => dot.x === head.x && dot.y === head.y)
+                ) {
+                    clearInterval(intervalId);
+                    alert('Game Over');
+                    restartGame();
+                }
+            }
+
+            function gameLoop() {
+                moveSnake();
+                drawSnake();
+                drawFood();
+                checkCollision();
+            }
+
+            function startGame() {
+                intervalId = setInterval(gameLoop, snakeSpeed);
+            }
+
+            function restartGame() {
+                snake = [{ x: 10, y: 10 }];
+                direction = directions.ArrowRight;
+                startGame();
+            }
+
+            document.addEventListener('keydown', handleKeydown);
+            startGame();
+        });
+    </script>
+</body>
+</html>
