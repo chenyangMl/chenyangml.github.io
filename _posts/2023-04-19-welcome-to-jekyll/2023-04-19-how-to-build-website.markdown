@@ -77,7 +77,7 @@ jekyll -v　　 |　　jekyll 4.3.2
 和发布分支。也支持自定义域名，需要单独购买后再配置。
 
 <div style="text-align: center;">  
-    <img src="{{site.url}}/blob/main/_posts/2023-04-19-welcome-to-jekyll/github_pages.jpg" style="display: block;">  
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/blob/main/_posts/2023-04-19-welcome-to-jekyll/github_pages.jpg" style="display: block;">  
 </div>
 
 
