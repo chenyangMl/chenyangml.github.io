@@ -1,9 +1,14 @@
 ---
 layout: post
-title:  "demo1!"
-date:   2023-04-19 14:45:13 +0800
+title:  "如何构建语音唤醒系统"
+date:   2024-03-22 14:48:11 +0800
 categories: jekyll update
 ---
+
+<p align="center">
+  <img src="https://github.com/chenyangMl/llama2.c-zh/blob/main/assets/llama2-zh.jpg" width="200" height="300" alt="Cute Llama-zh">
+</p>
+
 You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
 
 Jekyll requires blog post files to be named according to the following format:

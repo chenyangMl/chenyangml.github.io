@@ -1,4 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-08-14T16:19:07+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">chenyang’s Blog</title><subtitle>Machine learning Engineer. Focusing on computer vision and natural language processing.</subtitle><entry><title type="html">custom tokenizer</title><link href="http://localhost:4000/jekyll/update/2023/08/14/llama2.c.zh.html" rel="alternate" type="text/html" title="custom tokenizer" /><published>2023-08-14T14:48:11+08:00</published><updated>2023-08-14T14:48:11+08:00</updated><id>http://localhost:4000/jekyll/update/2023/08/14/llama2.c.zh</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2023/08/14/llama2.c.zh.html"><![CDATA[<p><code class="language-plaintext highlighter-rouge">Modify vocabulary</code></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-23T22:03:02+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chen Yang’s Blog</title><subtitle>Machine learning Engineer. Focusing on computer vision and natural language processing.</subtitle><entry><title type="html">如何构建语音唤醒系统</title><link href="http://localhost:4000/jekyll/update/2024/03/22/keyword-spotting.html" rel="alternate" type="text/html" title="如何构建语音唤醒系统" /><published>2024-03-22T14:48:11+08:00</published><updated>2024-03-22T14:48:11+08:00</updated><id>http://localhost:4000/jekyll/update/2024/03/22/keyword-spotting</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2024/03/22/keyword-spotting.html"><![CDATA[<p align="center">
+  <img src="https://github.com/chenyangMl/llama2.c-zh/blob/main/assets/llama2-zh.jpg" width="200" height="300" alt="Cute Llama-zh" />
+</p>
+
+<p>You’ll find this post in your <code class="language-plaintext highlighter-rouge">_posts</code> directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run <code class="language-plaintext highlighter-rouge">jekyll serve</code>, which launches a web server and auto-regenerates your site when a file is updated.</p>
+
+<p>Jekyll requires blog post files to be named according to the following format:</p>
+
+<p><code class="language-plaintext highlighter-rouge">YEAR-MONTH-DAY-title.MARKUP</code></p>
+
+<p>Where <code class="language-plaintext highlighter-rouge">YEAR</code> is a four-digit number, <code class="language-plaintext highlighter-rouge">MONTH</code> and <code class="language-plaintext highlighter-rouge">DAY</code> are both two-digit numbers, and <code class="language-plaintext highlighter-rouge">MARKUP</code> is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.</p>
+
+<p>Jekyll also offers powerful support for code snippets:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">print_hi</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+  <span class="nb">puts</span> <span class="s2">"Hi, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">end</span>
+<span class="n">print_hi</span><span class="p">(</span><span class="s1">'Tom'</span><span class="p">)</span>
+<span class="c1">#=&gt; prints 'Hi, Tom' to STDOUT.</span></code></pre></figure>
+
+<p>Check out the <a href="https://jekyllrb.com/docs/home">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href="https://github.com/jekyll/jekyll">Jekyll’s GitHub repo</a>. If you have questions, you can ask them on <a href="https://talk.jekyllrb.com/">Jekyll Talk</a>.</p>]]></content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">大语言模型——如何构建词表(Tokenizer)</title><link href="http://localhost:4000/jekyll/update/2023/08/14/llama2.c.zh.html" rel="alternate" type="text/html" title="大语言模型——如何构建词表(Tokenizer)" /><published>2023-08-14T14:48:11+08:00</published><updated>2023-08-14T14:48:11+08:00</updated><id>http://localhost:4000/jekyll/update/2023/08/14/llama2.c.zh</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2023/08/14/llama2.c.zh.html"><![CDATA[<p><code class="language-plaintext highlighter-rouge">Modify vocabulary</code></p>
 
 <p>As shown below, the original llama2-en mainly sample with english corpus, and llama2_ enzh forms a new 52k vocabulary by adding Chinese corpus statistics and merging the original vocabulary.</p>
 
@@ -41,20 +61,92 @@
   <li>
     <p><a href="https://github.com/bojone/t5_in_bert4keras/blob/6cf50dbf3ffd3b4e9f36a59ee9f98356cf686de0/tokenizer/reduce.py">toknizer reduce</a></p>
   </li>
-</ul>]]></content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"><![CDATA[Modify vocabulary]]></summary></entry><entry><title type="html">demo1!</title><link href="http://localhost:4000/jekyll/update/2023/04/19/welcome-to-jekyll.html" rel="alternate" type="text/html" title="demo1!" /><published>2023-04-19T14:45:13+08:00</published><updated>2023-04-19T14:45:13+08:00</updated><id>http://localhost:4000/jekyll/update/2023/04/19/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2023/04/19/welcome-to-jekyll.html"><![CDATA[<p>You’ll find this post in your <code class="language-plaintext highlighter-rouge">_posts</code> directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run <code class="language-plaintext highlighter-rouge">jekyll serve</code>, which launches a web server and auto-regenerates your site when a file is updated.</p>
+</ul>]]></content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"><![CDATA[Modify vocabulary]]></summary></entry><entry><title type="html">怎样使用Jekyll搭建个人网站？</title><link href="http://localhost:4000/tools/2023/04/19/how-to-build-website.html" rel="alternate" type="text/html" title="怎样使用Jekyll搭建个人网站？" /><published>2023-04-19T14:45:13+08:00</published><updated>2023-04-19T14:45:13+08:00</updated><id>http://localhost:4000/tools/2023/04/19/how-to-build-website</id><content type="html" xml:base="http://localhost:4000/tools/2023/04/19/how-to-build-website.html"><![CDATA[<style>  
+  /* 可选样式，为名言添加一些基本的样式 */  
+  .quote {  
+    font-family: 'SimSun', serif; /* 使用常见的中文字体 */  
+    font-size: 18px;  
+    text-align: justify; /* 两端对齐 */  
+    margin: 20px 0; /* 上下外边距 */  
+    padding: 10px; /* 内边距 */  
+    border: 1px solid #ccc; /* 边框 */  
+    border-radius: 5px; /* 边框圆角 */  
+    background-color: #f5f5f5; /* 背景色 */  
+  }  
+  /* 突出显示的样式 */  
+  .highlight {  
+    background-color: #E6E6FA; /* 黄色背景 */  
+    color: black; /* 黑色文本 */  
+  }  
+</style>
 
-<p>Jekyll requires blog post files to be named according to the following format:</p>
+<div class="quote">  
+  <p>积土成山，风雨兴焉；积水成渊，蛟龙生焉；积善成德，而神明自得，圣心备焉。</p>  
+  <p>故不积跬步，无以至千里；不积小流，无以成江海。</p>  
+  <p>骐骥一跃，不能十步；驽马十驾，功在不舍。</p>  
+  <p>锲而舍之，朽木不折；锲而不舍，金石可镂。</p>  
+  <p>蚓无爪牙之利，筋骨之强，上食埃土，下饮黄泉，<mark class="highlight">用心一也</mark>。</p>  
+  <p>蟹六跪而二螯，非蛇鳝之穴无可寄托者，<mark class="highlight">用心躁也</mark>。</p>  
+</div>
 
-<p><code class="language-plaintext highlighter-rouge">YEAR-MONTH-DAY-title.MARKUP</code></p>
+<p>上承先贤之志，积跬步至千里，积小流成江海，用心专一。</p>
 
-<p>Where <code class="language-plaintext highlighter-rouge">YEAR</code> is a four-digit number, <code class="language-plaintext highlighter-rouge">MONTH</code> and <code class="language-plaintext highlighter-rouge">DAY</code> are both two-digit numbers, and <code class="language-plaintext highlighter-rouge">MARKUP</code> is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.</p>
+<h1> 如何使用Jekyll搭建个人网站 </h1>
 
-<p>Jekyll also offers powerful support for code snippets:</p>
+<p><strong>Jekyll</strong> 是一个简单的博客形态的静态站点生产机器。它有一个模版目录，其中包含原始文本格式的文档，通过一个转换器（如Markdown）和我们的Liquid渲染器转化成一个完整的可发布的静态网站，你可以发布在任何你喜爱的服务器上。Jekyll 也可以运行在GitHub Page上，也就是说，你可以使用 GitHub 的服务来搭建你的项目页面、博客或者网站，而且是完全免费的。</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">print_hi</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
-  <span class="nb">puts</span> <span class="s2">"Hi, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">"</span>
-<span class="k">end</span>
-<span class="n">print_hi</span><span class="p">(</span><span class="s1">'Tom'</span><span class="p">)</span>
-<span class="c1">#=&gt; prints 'Hi, Tom' to STDOUT.</span></code></pre></figure>
+<h2> 本地环境准备 </h2>
 
-<p>Check out the <a href="https://jekyllrb.com/docs/home">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href="https://github.com/jekyll/jekyll">Jekyll’s GitHub repo</a>. If you have questions, you can ask them on <a href="https://talk.jekyllrb.com/">Jekyll Talk</a>.</p>]]></content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"><![CDATA[You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.]]></summary></entry></feed>
+<p>rubgem的安装可参考官网<a href="https://rubygems.org/pages/download">Download RubyGems</a></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc, g++ &gt;=5.4.0
+sudo add-apt-repository ppa:brightbox/ruby-ng
+sudo apt-get update
+sudo apt-get install ruby2.6 ruby2.6-dev
+最后 &gt;&gt; gem install jekyll, bundler
+</code></pre></div></div>
+
+<p>最后确认下各依赖软件版本</p>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /etc/issue | Ubuntu 16.04.7 LTS \n \l
+gem -v      | 3.4.12
+gcc -v      | 5.4.0
+g++ -v      | 5.4.0
+ruby -v     | ruby 2.6.6p146 (2020-03-31 revision 67876) [x86_64-linux-gnu]
+bundler -v　 | bundler-2.4.12
+jekyll -v　　 |　　jekyll 4.3.2
+</code></pre></div></div>
+
+<h2> 本地创建jekyll项目 </h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>本地新建jekyll项目测试，命令行
+&gt;&gt; jekyll new cyBlog　　 #如一直卡着ctrl+c即可
+&gt;&gt; cd cyBlog
+&gt;&gt; jekyll server
+</code></pre></div></div>
+<p>弹出本地测试地址，点击即可本地预览静态网站。</p>
+<blockquote>
+  <blockquote>
+    <p>Server address: http://127.0.0.1:4000/</p>
+  </blockquote>
+</blockquote>
+
+<h2> 项目推送到github上 </h2>
+<p>将Jekyll构建的静态网站 推到github上托管运行起来，个人博客网站就可以在公网访问。新建一个工程，设置好名称
+和发布分支。也支持自定义域名，需要单独购买后再配置。</p>
+
+<div style="text-align: center;">  
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/blob/main/_posts/2023-04-19-welcome-to-jekyll/github_pages.jpg" style="display: block;" />  
+</div>
+
+<h2> 总结</h2>
+
+<ol>
+  <li>
+    <p>MarkDown在这里也支持html的众多标签和样式，可以适当使用来改变显示风格。</p>
+  </li>
+  <li>
+    <p>新增post和更新: 在_posts新增页面, 本地”jekyll server”查看网页效果. 确定效果一致后,再push到远程仓库</p>
+  </li>
+  <li>
+    <p>域名绑定可参考 <a href="https://zhuanlan.zhihu.com/p/671540743">Su3Says:域名绑定</a></p>
+  </li>
+</ol>]]></content><author><name></name></author><category term="tools" /><summary type="html"><![CDATA[积土成山，风雨兴焉；积水成渊，蛟龙生焉；积善成德，而神明自得，圣心备焉。 故不积跬步，无以至千里；不积小流，无以成江海。 骐骥一跃，不能十步；驽马十驾，功在不舍。 锲而舍之，朽木不折；锲而不舍，金石可镂。 蚓无爪牙之利，筋骨之强，上食埃土，下饮黄泉，用心一也。 蟹六跪而二螯，非蛇鳝之穴无可寄托者，用心躁也。]]></summary></entry></feed>
