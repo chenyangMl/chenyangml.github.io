@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-24T09:42:51+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chen Yang’s Blog</title><subtitle>Machine learning Engineer. Focusing on computer vision and natural language processing.</subtitle><entry><title type="html">如何构建语音唤醒系统</title><link href="http://localhost:4000/jekyll/update/2024/03/22/keyword-spotting.html" rel="alternate" type="text/html" title="如何构建语音唤醒系统" /><published>2024-03-22T14:48:11+08:00</published><updated>2024-03-22T14:48:11+08:00</updated><id>http://localhost:4000/jekyll/update/2024/03/22/keyword-spotting</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2024/03/22/keyword-spotting.html"><![CDATA[<p align="center">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-24T10:04:03+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chen Yang’s Blog</title><subtitle>Machine learning Engineer. Focusing on computer vision and natural language processing.</subtitle><entry><title type="html">如何构建语音唤醒系统</title><link href="http://localhost:4000/jekyll/update/2024/03/22/keyword-spotting.html" rel="alternate" type="text/html" title="如何构建语音唤醒系统" /><published>2024-03-22T14:48:11+08:00</published><updated>2024-03-22T14:48:11+08:00</updated><id>http://localhost:4000/jekyll/update/2024/03/22/keyword-spotting</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2024/03/22/keyword-spotting.html"><![CDATA[<p align="center">
   <img src="https://github.com/chenyangMl/llama2.c-zh/blob/main/assets/llama2-zh.jpg" width="200" height="300" alt="Cute Llama-zh" />
 </p>
 
@@ -130,11 +130,12 @@ jekyll -v　　 |　　jekyll 4.3.2
 </blockquote>
 
 <h2> 项目推送到github上 </h2>
+
 <p>将Jekyll构建的静态网站 推到github上托管运行起来，个人博客网站就可以在公网访问。新建一个工程，设置好名称
 和发布分支。也支持自定义域名，需要单独购买后再配置。</p>
 
 <div style="text-align: center;">  
-    <img src="https://raw.githubusercontent.com/chenyangMl/chenyangml.github.io/main/_posts/2023-04-19-welcome-to-jekyll/github_pages.jpg" style="width: 60%;" />  
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2023-04-19-welcome-to-jekyll/github_pages.jpg" style="width: 100%;margin-bottom: 20px;" />  
 </div>
 
 <h2> Jekyll构建静态网站tips </h2>
