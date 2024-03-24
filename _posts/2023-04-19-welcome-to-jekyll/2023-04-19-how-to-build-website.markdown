@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "怎样使用Jekyll搭建个人网站？"
+title:  "如何使用Jekyll搭建个人博客？"
 date:   2023-04-19 14:45:13 +0800
 categories: tools
 ---
@@ -35,7 +35,7 @@ categories: tools
 
 <p>上承先贤之志，积跬步至千里，积小流成江海，用心专一。</p>  
 
-<h1> 如何使用Jekyll搭建个人网站 </h1>
+<h1> 如何使用Jekyll搭建个人博客 </h1>
 
 **Jekyll** 是一个简单的博客形态的静态站点生产机器。它有一个模版目录，其中包含原始文本格式的文档，通过一个转换器（如Markdown）和我们的Liquid渲染器转化成一个完整的可发布的静态网站，你可以发布在任何你喜爱的服务器上。Jekyll 也可以运行在GitHub Page上，也就是说，你可以使用 GitHub 的服务来搭建你的项目页面、博客或者网站，而且是完全免费的。
 
@@ -77,8 +77,40 @@ jekyll -v　　 |　　jekyll 4.3.2
 和发布分支。也支持自定义域名，需要单独购买后再配置。
 
 <div style="text-align: center;">  
-    <img src="https://github.com/chenyangMl/chenyangml.github.io/blob/main/_posts/2023-04-19-welcome-to-jekyll/github_pages.jpg" style="display: block;">  
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2023-04-19-welcome-to-jekyll/github_pages.jpg" style="display: block;">  
 </div>
+
+
+<h2> Jekyll构建静态网站tips </h2>
+
+- **categories**标签的作用
+
+```
+在每一个.markdown文档的开头可以配置，比如你做如下设置
+
+
+---
+layout: post
+title:  "大语言模型——如何构建词表(Tokenizer)"
+date:   2023-08-14 14:48:11 +0800
+categories: jekyll update
+---
+
+
+构建网站后，会在 _site 中看到它自动的进行分类。其中jekyll是一级目录，update是二级目录。
+所以categories可以用来很好管理文档大类别，大类别的子类可以用空格分开进行设置。
+
+_site/jekyll/
+└── update
+    ├── 2023
+    │   └── 08
+    │       └── 14
+    │           └── llama2.c.zh.html
+    └── 2024
+        └── 03
+            └── 22
+                └── keyword-spotting.html
+```
 
 
 
