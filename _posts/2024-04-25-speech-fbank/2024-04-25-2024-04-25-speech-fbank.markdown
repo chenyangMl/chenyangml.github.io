@@ -1,0 +1,259 @@
+---
+layout: post
+title:  "音频声学特征提取"
+date:   2024-04-25 14:48:11 +0800
+categories: speech asr
+---
+
+
+
+我们都在物理课上听过老师敲击音叉的声音，声音是一种由物体或物质振动产生的机械波，通过介质（如空气、水或固体）传播的能量。当物体振动时，它会引起周围介质的分子或粒子的振动。这些振动以波的形式传播，形成声音波。
+
+声音波的特征包括以下几个方面：
+
+1. 频率：声音的频率是指振动源每秒钟震动的次数，单位是赫兹（Hz）。频率决定了声音的音调，高频率的声音听起来较高音，低频率的声音听起来较低音。
+2. 振幅：声音的振幅是指振动的幅度或能量大小。振幅决定了声音的音量或响度，振幅越大，声音越响亮。
+3. 声波形状：声音波以波形的形式传播，常见的波形包括正弦波、方波、锯齿波等。不同的波形会影响声音的音色和谐波结构。
+4. 声速：声音在特定介质中传播的速度称为声速。声速取决于介质的性质，例如标准大气压下，空气中的声速约为340米/秒。
+
+人类通过耳朵来感知声音。当声音波到达耳朵时，它们会引起耳膜和耳内的细小结构振动。随后，这些振动通过听觉神经传递到大脑，被解释为具有特定频率、振幅和波形的声音。
+
+
+
+# 音频数据格式
+
+
+
+
+
+## PCM数据格式
+
+![](https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/PCM_Encoded_signal.png)
+
+​							                                  (Image source: [PCM-RAW](https://recoverit.wondershare.fr/file-tips/pcm-raw.html))
+
+上图示例一段连续音频数据如何离散采样成PCM格式的音频数据的过程。
+
+
+
+采样频率(Sample Rate)： 即音频离散采样的频率,指每秒钟取得声音样本的次数。采样频率越高,声音的质量也就越好,声音的还原也就越真实，但同时它占的资源比较多。语音识别中一般使用8000, 16000的采样率，如sample reate=8000表示1秒连续音频会被采样成8000个数据样本。
+
+采样位深(Sample Depths)：即采样值(音波幅度的量化值)，它是用来衡量声音波动变化的一个参数，也可以说是声卡的分辨率，一般会用8、16、20、24bits表示。如sample depth=16bit，表示每一个采样出来的样本需要使用16bit来记录其波动浮动。
+
+声道数(Channels)：有单声道和立体声(多通道)。做ASR识别用的是单声道。
+
+时长(Duration):  采样的音频数据的时长。
+
+
+
+如: 一个60s的PCM音频，采样频率为16k(即每秒钟16000个样本), 采样位数为16bit(表示一个样本占用16bit, 即2个bytes)，单声道。
+
+则存储量(bytes) = (采样频率 × 采样位数/8） × 声道 × 时间 = （sample_rate x sample_bit / 2） x channel x time.
+
+存储量 = (16000 * 16 / 8 ) * 1 * 60 / 1024 / 1024 = 1.8310546875 M Bytes
+
+1ms 包含 16000 / 1000个样本，占用16*16/8 = 32bytes。
+
+
+
+如：已知PCM音频数据大小为57708bytes, 其sample_rate=16k, sample_bit=16, channel=1。则该段音频
+
+样本数量samples = 57708 / (16 / 8)  / 1 = 28854 (个)。
+
+音频时长duration = samples / 16000 =  1.803375 （秒）
+
+
+
+## WAV格式
+
+wav数据格式就是PCM数据的头上加上编码，采样率等信息的字节拼接成一种的更利于工具直接解析的数据格式，去掉wav的信息头，就是PCM原数据。
+
+```
+ with open("16k.wav", "rb") as f: print(f.read()[:150])
+
+b'RIFF\xc6\xfb\x01\x00WAVEfmt \x10\x00\x00\x00\x01\x00\x01\x00\x80>\x00\x00\x00}\x00\x00\x02\x00\x10\x00LIST\x1a\x00\x00\x00INFOISFT\x0e\x00\x00\x00Lavf57.71.100\x00data\x80\xfb\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x00\xff\xff\x01\x00\x00\x00\xff\xff\x01\x00\xff\xff'
+
+with open("16k.pcm", "rb") as f: print(f.read()[:150])
+b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x00\xff\xff\x01\x00\x00\x00\xff\xff\x01\x00\xff\xff\x01\x00\x00\x00\xff\xff\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\xff\xff\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00'
+```
+
+
+
+
+
+## AMR数据格式
+
+AMR又分为两种，一种是AMR－NB（AMR-NarrowBind），语音带宽范围：300－3700Hz，8KHz采样频率；
+
+另外一种是AMR-WB（AMR WideBand），语音带宽范围50－7000Hz，16KHz采样频率。
+
+amr格式参考: https://github.com/FFmpeg/FFmpeg/blob/master/libavformat/amr.c
+
+| AMR格式        | 数据头(字节)         | 字节数 |
+| :------------- | :------------------- | :----- |
+| 8k 单通道 amr  | "#!AMR\x0a"          | 6      |
+| 8k 多通道 amr  | "#!AMR_MC1.0\x0a"    | 12     |
+| 16k 单通道 amr | "#!AMR-WB\x0a"       | 9      |
+| 16k 多通道 amr | "#!AMR-WB_MC1.0\x0a" | 15     |
+
+如下示例16k 单通道amr数据部分字节。
+
+```
+b'#!AMRWB\x0aD\xfb\x12\x04\xaa5\x1cp\x11\xfb\xf39\x90\xd6:^\xe3,\x9d\xaa\xa8w\xeb\xed\xf3\x98_\xa9\x96Nw\xad\xb6]\x1cmG\xab\x05\x97\xfd\x8bZT)\xff7\x7f\xe9\xa1!'
+```
+
+
+
+## [OPUS音频格式](https://opus-codec.org/)
+
+Opus is a totally open, royalty-free, highly versatile audio codec. Opus is unmatched for interactive speech and music transmission over the Internet, but is also intended for storage and streaming applications. It is standardized by the Internet Engineering Task Force (IETF) as [RFC 6716](https://tools.ietf.org/html/rfc6716) which incorporated technology from Skype’s SILK codec and Xiph.Org’s CELT codec.
+
+不通的音频格式是用于存储音频数据，如果我们要对音频做建模，识别音频中的内容，还需要对音频做声学特征提取。
+
+
+
+# 梅尔波谱声学特征提取
+
+参考 [Automatic Speech Recognition add Text-to-Speech](https://web.stanford.edu/~jurafsky/slp3/16.pdf)
+
+ASR的第一步是将波形转换成一系列的声学特征向量。每个特征向量表示一个小时间窗口的音频信号。下面展示如何转换原始波形成Log mel spectrum.
+
+声音是物体振动产生的声波。下面这个声波记录的是英文单词'baby'最后一个元音'[iy]'的发音声波，x轴是时间，y轴表示声压的强弱变化。声压就是发声的时候产生的大于或小于标准大气压的情况。
+
+![](https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-waveform.png)
+
+​         (Image source: [Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023](https://web.stanford.edu/~jurafsky/slp3/16.pdf))
+
+
+
+## 1 采样(Sampling)和量化(Quantization)
+
+量化： 用一个整数来表示声波在采样时刻下的振幅(Amplitude)，比如使用8bit(-128~127)，16bit(-32768~32767)来表示。
+
+如下是一个Linear PCM公式
+$$
+F(x)=\frac {sgn(x)\, log(1\, +\mu |x|\, )} {log(1\, +\, \mu )}\, \, \, \, -1\, \leq x\leq 1
+$$
+其中µ=255，如果是8bit量化。通过采样和量化过程，就可以把连续声波信号转换为离散的数字信号。(计算机可以表征的数字)
+
+
+
+## 2 加窗 ( Windowing ) 
+
+我们可以利用一个语音窗口在数字化的音频数据滑动提取频谱特征，每个窗口提取到的是对应窗口音频的音素特征。我们可以近似在小窗口的音频信号是稳定的。(实际上音频是一个非稳定信号)。
+
+每个窗口提取一段音频叫做帧(frame)。加窗处理主要涉及到三个参数，
+
+- window size 或 frame size(ms级别): 指加窗处理的宽度。
+- frame stride(或shift, offset)：指在加窗处理过程的滑动偏移量。
+- shape: 窗的形状。(比如有 rectangular， Hamming)
+
+下图展示的就是使用rectangular, window size为25ms, frame shift为10ms的加窗处理过程。从图上看，加窗后的音频信号和原信号基本一致。
+
+![](https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-windowing.png)
+
+​				     (Image source: [Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023](https://web.stanford.edu/~jurafsky/slp3/16.pdf))
+
+信号的计算过程如下，新信号等于当前时刻n的信号值s[n] 乘以加窗后的信号值w[n]。
+$$
+y[n]\, =\, w[n]s[n]
+$$
+Rectangular和Hamming窗的区别，Rectangular窗直接在边界位置切断，在此基础上做傅里叶变换时会引起问题。基于这个原因，对于声学特征提取，我们更常用Hamming窗。Hamming窗在窗口边界位置缩放信号值趋近于零，能避免不连续问题。下图展示了两种加窗形式，下面是两者的公式(L表示帧数量)。
+$$
+\begin{equation}
+\text{rectangular} \quad w[n] = 
+\begin{cases} 
+1 & 0 \leq n \leq L-1 \\
+0 & \text{otherwise}
+\end{cases}
+\end{equation}
+$$
+
+$$
+\begin{equation}
+\text{Hamming} \quad w[n] = 
+\begin{cases} 
+0.54 - 0.46 \cos \left( \frac{2\pi n}{L} \right) & 0 \leq n \leq L-1 \\
+0 & \text{otherwise}
+\end{cases}
+\end{equation}
+$$
+
+![](https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-windowing-shape.png)
+
+​				     (Image source: [Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023](https://web.stanford.edu/~jurafsky/slp3/16.pdf))
+
+
+
+## 3 离散傅里叶变换(Discrete Fourier Transform)
+
+下面一步是使用离散傅里叶变换提取加窗后信号的频谱信息。目的是为了知道不同频率波段音频信号包含的能量多少。下图展示的就是(a)一个25ms Huamming 加窗处理的音频信号片段,通过傅里叶变换得到频谱信息(b)。我们从频谱信号图(b)上就可以清晰的看到一个声音[iy]片段，在0~8000hz的频率区间内，它的强弱变化。
+
+![](https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-DFT.png)
+
+​				     (Image source: [Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023](https://web.stanford.edu/~jurafsky/slp3/16.pdf))
+
+一个常用的计算DFT的算法是快速傅里叶变换(FFT)。
+
+
+
+## 4 梅尔滤波和取对数 (Mel Filter Bank and Log)
+
+通过FFT处理过的音频信号可以让我们清晰的观察到频率区间上的能量变化。但是人类听力并不是对所有频率波段都敏感，人类听力对低频更加敏感。
+
+基于这个特点，建模人类听力对高低频倾向的这个特性有助于提升语音识别性能。工程上实现这个目的，通过将原始声学频率转换成梅尔频率。转换公式如下：
+$$
+mel(f)\, =\, 1127\, ln(1\, +\, \frac {f} {700})
+$$
+使用一系列的梅尔滤波器采集每个频率波段的能量，并对其取对数。这使得梅尔滤波组后的频谱信号在低频信号分辨率更高，在高频信号分辨率低。即很好的建模了上述所说的人听力的特性。
+
+![](https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-mel-fbank.png)
+
+​				     (Image source: [Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023](https://web.stanford.edu/~jurafsky/slp3/16.pdf))
+
+
+
+通过以上步骤，麦克风或电话采集到的音频信号，通过采样量化、加窗、离散傅里叶变换、梅尔频谱滤波就可以转换成更具有辨识读的声学频谱信号。这样的声学信号便可用于后续的特征建模，比如用DL模型建模。
+
+
+
+Fbank声学特征提取计算示例，  一个50ms的PCM音频数据，s16le编码，采样率（sample_rate）= 16000，  帧长度（frame_length)=25ms、帧移（frame_shift）=10ms 和Mel滤波器的数量（num_mel_bins）= 80。
+
+```
+则：
+总采样数 = 50ms * (16000 / 1000) = 800个
+
+帧长度采样点数 = 16000 * 0.025  // 25ms = 400， 即一个窗口长度为400个采样点
+帧移采样点数 = 16000 * 0.01  // 10ms  = 160， 即每次偏移160个采样点
+
+帧数量 = (总采样点数 - 帧长度采样点数) / 帧移采样点数 + 1
+       = (800 - 400) / 160 + 1
+       = 5
+因此一个50ms的音频数据，如上参数得到的fbank特征为5x80；
+```
+
+
+
+python计算工具
+
+```
+import torchaudio.compliance.kaldi as kaldi
+feats = kaldi.fbank(wave_tensor,
+                      num_mel_bins=self.num_mel_bins,
+                      frame_length=self.frame_length,
+                      frame_shift=self.frame_shift,
+                      dither=0.0,
+                      energy_floor=0.0,
+                      window_type='hamming',
+                      sample_frequency=self.sample_rate)
+```
+
+
+
+备注
+
+> 尽管使用更高的采样率(sample rate)获得更高的ASR准确率，但实际应用中我们不能使用一个ASR模型同时训练和测试不同的采样率。
+
+所以一般8k,16k的音频会分开处理。
+
+> 8k采样率的音频主要用于电话音频，16k采样率的音频主要用于麦克风音频。
