@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "如何构建语音唤醒系统"
+title:  "SPEECH: 如何构建语音唤醒系统"
 date:   2024-03-22 14:48:11 +0800
 categories: speech kws
 ---

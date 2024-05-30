@@ -1,24 +1,269 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-24T10:04:03+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chen Yang’s Blog</title><subtitle>Machine learning Engineer. Focusing on computer vision and natural language processing.</subtitle><entry><title type="html">如何构建语音唤醒系统</title><link href="http://localhost:4000/jekyll/update/2024/03/22/keyword-spotting.html" rel="alternate" type="text/html" title="如何构建语音唤醒系统" /><published>2024-03-22T14:48:11+08:00</published><updated>2024-03-22T14:48:11+08:00</updated><id>http://localhost:4000/jekyll/update/2024/03/22/keyword-spotting</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2024/03/22/keyword-spotting.html"><![CDATA[<p align="center">
-  <img src="https://github.com/chenyangMl/llama2.c-zh/blob/main/assets/llama2-zh.jpg" width="200" height="300" alt="Cute Llama-zh" />
-</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-05-30T14:17:21+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chen Yang’s Blog</title><subtitle>Machine learning Engineer. Focusing on computer vision and natural language processing.</subtitle><entry><title type="html">SPEECH: 音频声学特征提取</title><link href="http://localhost:4000/speech/asr/2024/04/25/2024-04-25-speech-fbank.html" rel="alternate" type="text/html" title="SPEECH: 音频声学特征提取" /><published>2024-04-25T14:48:11+08:00</published><updated>2024-04-25T14:48:11+08:00</updated><id>http://localhost:4000/speech/asr/2024/04/25/2024-04-25-speech-fbank</id><content type="html" xml:base="http://localhost:4000/speech/asr/2024/04/25/2024-04-25-speech-fbank.html"><![CDATA[<p>我们都在物理课上听过老师敲击音叉的声音，声音是一种由物体或物质振动产生的机械波，通过介质（如空气、水或固体）传播的能量。当物体振动时，它会引起周围介质的分子或粒子的振动。这些振动以波的形式传播，形成声音波。</p>
 
-<p>You’ll find this post in your <code class="language-plaintext highlighter-rouge">_posts</code> directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run <code class="language-plaintext highlighter-rouge">jekyll serve</code>, which launches a web server and auto-regenerates your site when a file is updated.</p>
+<p>声音波的特征包括以下几个方面：</p>
 
-<p>Jekyll requires blog post files to be named according to the following format:</p>
+<ol>
+  <li>频率：声音的频率是指振动源每秒钟震动的次数，单位是赫兹（Hz）。频率决定了声音的音调，高频率的声音听起来较高音，低频率的声音听起来较低音。</li>
+  <li>振幅：声音的振幅是指振动的幅度或能量大小。振幅决定了声音的音量或响度，振幅越大，声音越响亮。</li>
+  <li>声波形状：声音波以波形的形式传播，常见的波形包括正弦波、方波、锯齿波等。不同的波形会影响声音的音色和谐波结构。</li>
+  <li>声速：声音在特定介质中传播的速度称为声速。声速取决于介质的性质，例如标准大气压下，空气中的声速约为340米/秒。</li>
+</ol>
 
-<p><code class="language-plaintext highlighter-rouge">YEAR-MONTH-DAY-title.MARKUP</code></p>
+<p>人类通过耳朵来感知声音。当声音波到达耳朵时，它们会引起耳膜和耳内的细小结构振动。随后，这些振动通过听觉神经传递到大脑，被解释为具有特定频率、振幅和波形的声音。</p>
 
-<p>Where <code class="language-plaintext highlighter-rouge">YEAR</code> is a four-digit number, <code class="language-plaintext highlighter-rouge">MONTH</code> and <code class="language-plaintext highlighter-rouge">DAY</code> are both two-digit numbers, and <code class="language-plaintext highlighter-rouge">MARKUP</code> is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.</p>
+<h1 id="音频数据格式">音频数据格式</h1>
 
-<p>Jekyll also offers powerful support for code snippets:</p>
+<h2 id="pcm数据格式">PCM数据格式</h2>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">print_hi</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
-  <span class="nb">puts</span> <span class="s2">"Hi, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">"</span>
-<span class="k">end</span>
-<span class="n">print_hi</span><span class="p">(</span><span class="s1">'Tom'</span><span class="p">)</span>
-<span class="c1">#=&gt; prints 'Hi, Tom' to STDOUT.</span></code></pre></figure>
+<p><img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/PCM_Encoded_signal.png" alt="" /></p>
 
-<p>Check out the <a href="https://jekyllrb.com/docs/home">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href="https://github.com/jekyll/jekyll">Jekyll’s GitHub repo</a>. If you have questions, you can ask them on <a href="https://talk.jekyllrb.com/">Jekyll Talk</a>.</p>]]></content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">大语言模型——如何构建词表(Tokenizer)</title><link href="http://localhost:4000/jekyll/update/2023/08/14/llama2.c.zh.html" rel="alternate" type="text/html" title="大语言模型——如何构建词表(Tokenizer)" /><published>2023-08-14T14:48:11+08:00</published><updated>2023-08-14T14:48:11+08:00</updated><id>http://localhost:4000/jekyll/update/2023/08/14/llama2.c.zh</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2023/08/14/llama2.c.zh.html"><![CDATA[<p><code class="language-plaintext highlighter-rouge">Modify vocabulary</code></p>
+<p>​							                                  (Image source: <a href="https://recoverit.wondershare.fr/file-tips/pcm-raw.html">PCM-RAW</a>)</p>
+
+<p>上图示例一段连续音频数据如何离散采样成PCM格式的音频数据的过程。</p>
+
+<p>采样频率(Sample Rate)： 即音频离散采样的频率,指每秒钟取得声音样本的次数。采样频率越高,声音的质量也就越好,声音的还原也就越真实，但同时它占的资源比较多。语音识别中一般使用8000, 16000的采样率，如sample reate=8000表示1秒连续音频会被采样成8000个数据样本。</p>
+
+<p>采样位深(Sample Depths)：即采样值(音波幅度的量化值)，它是用来衡量声音波动变化的一个参数，也可以说是声卡的分辨率，一般会用8、16、20、24bits表示。如sample depth=16bit，表示每一个采样出来的样本需要使用16bit来记录其波动浮动。</p>
+
+<p>声道数(Channels)：有单声道和立体声(多通道)。做ASR识别用的是单声道。</p>
+
+<p>时长(Duration):  采样的音频数据的时长。</p>
+
+<p>如: 一个60s的PCM音频，采样频率为16k(即每秒钟16000个样本), 采样位数为16bit(表示一个样本占用16bit, 即2个bytes)，单声道。</p>
+
+<p>则存储量(bytes) = (采样频率 × 采样位数/8） × 声道 × 时间 = （sample_rate x sample_bit / 2） x channel x time.</p>
+
+<p>存储量 = (16000 * 16 / 8 ) * 1 * 60 / 1024 / 1024 = 1.8310546875 M Bytes</p>
+
+<p>1ms 包含 16000 / 1000个样本，占用16*16/8 = 32bytes。</p>
+
+<p>如：已知PCM音频数据大小为57708bytes, 其sample_rate=16k, sample_bit=16, channel=1。则该段音频</p>
+
+<p>样本数量samples = 57708 / (16 / 8)  / 1 = 28854 (个)。</p>
+
+<p>音频时长duration = samples / 16000 =  1.803375 （秒）</p>
+
+<h2 id="wav格式">WAV格式</h2>
+
+<p>wav数据格式就是PCM数据的头上加上编码，采样率等信息的字节拼接成一种的更利于工具直接解析的数据格式，去掉wav的信息头，就是PCM原数据。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> with open("16k.wav", "rb") as f: print(f.read()[:150])
+
+b'RIFF\xc6\xfb\x01\x00WAVEfmt \x10\x00\x00\x00\x01\x00\x01\x00\x80&gt;\x00\x00\x00}\x00\x00\x02\x00\x10\x00LIST\x1a\x00\x00\x00INFOISFT\x0e\x00\x00\x00Lavf57.71.100\x00data\x80\xfb\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x00\xff\xff\x01\x00\x00\x00\xff\xff\x01\x00\xff\xff'
+
+with open("16k.pcm", "rb") as f: print(f.read()[:150])
+b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x00\xff\xff\x01\x00\x00\x00\xff\xff\x01\x00\xff\xff\x01\x00\x00\x00\xff\xff\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\xff\xff\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00'
+</code></pre></div></div>
+
+<h2 id="amr数据格式">AMR数据格式</h2>
+
+<p>AMR又分为两种，一种是AMR－NB（AMR-NarrowBind），语音带宽范围：300－3700Hz，8KHz采样频率；</p>
+
+<p>另外一种是AMR-WB（AMR WideBand），语音带宽范围50－7000Hz，16KHz采样频率。</p>
+
+<p>amr格式参考: https://github.com/FFmpeg/FFmpeg/blob/master/libavformat/amr.c</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">AMR格式</th>
+      <th style="text-align: left">数据头(字节)</th>
+      <th style="text-align: left">字节数</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">8k 单通道 amr</td>
+      <td style="text-align: left">”#!AMR\x0a”</td>
+      <td style="text-align: left">6</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">8k 多通道 amr</td>
+      <td style="text-align: left">”#!AMR_MC1.0\x0a”</td>
+      <td style="text-align: left">12</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">16k 单通道 amr</td>
+      <td style="text-align: left">”#!AMR-WB\x0a”</td>
+      <td style="text-align: left">9</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">16k 多通道 amr</td>
+      <td style="text-align: left">”#!AMR-WB_MC1.0\x0a”</td>
+      <td style="text-align: left">15</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>如下示例16k 单通道amr数据部分字节。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>b'#!AMRWB\x0aD\xfb\x12\x04\xaa5\x1cp\x11\xfb\xf39\x90\xd6:^\xe3,\x9d\xaa\xa8w\xeb\xed\xf3\x98_\xa9\x96Nw\xad\xb6]\x1cmG\xab\x05\x97\xfd\x8bZT)\xff7\x7f\xe9\xa1!'
+</code></pre></div></div>
+
+<h2 id="opus音频格式"><a href="https://opus-codec.org/">OPUS音频格式</a></h2>
+
+<p>Opus is a totally open, royalty-free, highly versatile audio codec. Opus is unmatched for interactive speech and music transmission over the Internet, but is also intended for storage and streaming applications. It is standardized by the Internet Engineering Task Force (IETF) as <a href="https://tools.ietf.org/html/rfc6716">RFC 6716</a> which incorporated technology from Skype’s SILK codec and Xiph.Org’s CELT codec.</p>
+
+<p>不通的音频格式是用于存储音频数据，如果我们要对音频做建模，识别音频中的内容，还需要对音频做声学特征提取。</p>
+
+<h1 id="梅尔波谱声学特征提取">梅尔波谱声学特征提取</h1>
+
+<p>参考 <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Automatic Speech Recognition add Text-to-Speech</a></p>
+
+<p>ASR的第一步是将波形转换成一系列的声学特征向量。每个特征向量表示一个小时间窗口的音频信号。下面展示如何转换原始波形成Log mel spectrum.</p>
+
+<p>声音是物体振动产生的声波。下面这个声波记录的是英文单词’baby’最后一个元音’[iy]’的发音声波，x轴是时间，y轴表示声压的强弱变化。声压就是发声的时候产生的大于或小于标准大气压的情况。</p>
+
+<p><img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-waveform.png" alt="" /></p>
+
+<p>​         (Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky &amp; James H. Martin 2023</a>)</p>
+
+<h2 id="1-采样sampling和量化quantization">1 采样(Sampling)和量化(Quantization)</h2>
+
+<p>量化： 用一个整数来表示声波在采样时刻下的振幅(Amplitude)，比如使用8bit(-128~127)，16bit(-32768~32767)来表示。</p>
+
+<p>如下是一个Linear PCM公式
+\(F(x)=\frac {sgn(x)\, log(1\, +\mu |x|\, )} {log(1\, +\, \mu )}\, \, \, \, -1\, \leq x\leq 1\)
+其中µ=255，如果是8bit量化。通过采样和量化过程，就可以把连续声波信号转换为离散的数字信号。(计算机可以表征的数字)</p>
+
+<h2 id="2-加窗--windowing-">2 加窗 ( Windowing )</h2>
+
+<p>我们可以利用一个语音窗口在数字化的音频数据滑动提取频谱特征，每个窗口提取到的是对应窗口音频的音素特征。我们可以近似在小窗口的音频信号是稳定的。(实际上音频是一个非稳定信号)。</p>
+
+<p>每个窗口提取一段音频叫做帧(frame)。加窗处理主要涉及到三个参数，</p>
+
+<ul>
+  <li>window size 或 frame size(ms级别): 指加窗处理的宽度。</li>
+  <li>frame stride(或shift, offset)：指在加窗处理过程的滑动偏移量。</li>
+  <li>shape: 窗的形状。(比如有 rectangular， Hamming)</li>
+</ul>
+
+<p>下图展示的就是使用rectangular, window size为25ms, frame shift为10ms的加窗处理过程。从图上看，加窗后的音频信号和原信号基本一致。</p>
+
+<p><img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-windowing.png" alt="" /></p>
+
+<p>​				     (Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky &amp; James H. Martin 2023</a>)</p>
+
+<p>信号的计算过程如下，新信号等于当前时刻n的信号值s[n] 乘以加窗后的信号值w[n]。
+\(y[n]\, =\, w[n]s[n]\)
+Rectangular和Hamming窗的区别，Rectangular窗直接在边界位置切断，在此基础上做傅里叶变换时会引起问题。基于这个原因，对于声学特征提取，我们更常用Hamming窗。Hamming窗在窗口边界位置缩放信号值趋近于零，能避免不连续问题。下图展示了两种加窗形式，下面是两者的公式(L表示帧数量)。
+\(\begin{equation}
+\text{rectangular} \quad w[n] = 
+\begin{cases} 
+1 &amp; 0 \leq n \leq L-1 \\
+0 &amp; \text{otherwise}
+\end{cases}
+\end{equation}\)</p>
+
+\[\begin{equation}
+\text{Hamming} \quad w[n] = 
+\begin{cases} 
+0.54 - 0.46 \cos \left( \frac{2\pi n}{L} \right) &amp; 0 \leq n \leq L-1 \\
+0 &amp; \text{otherwise}
+\end{cases}
+\end{equation}\]
+
+<p><img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-windowing-shape.png" alt="" /></p>
+
+<p>​				     (Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky &amp; James H. Martin 2023</a>)</p>
+
+<h2 id="3-离散傅里叶变换discrete-fourier-transform">3 离散傅里叶变换(Discrete Fourier Transform)</h2>
+
+<p>下面一步是使用离散傅里叶变换提取加窗后信号的频谱信息。目的是为了知道不同频率波段音频信号包含的能量多少。下图展示的就是(a)一个25ms Huamming 加窗处理的音频信号片段,通过傅里叶变换得到频谱信息(b)。我们从频谱信号图(b)上就可以清晰的看到一个声音[iy]片段，在0~8000hz的频率区间内，它的强弱变化。</p>
+
+<p><img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-DFT.png" alt="" /></p>
+
+<p>​				     (Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky &amp; James H. Martin 2023</a>)</p>
+
+<p>一个常用的计算DFT的算法是快速傅里叶变换(FFT)。</p>
+
+<h2 id="4-梅尔滤波和取对数-mel-filter-bank-and-log">4 梅尔滤波和取对数 (Mel Filter Bank and Log)</h2>
+
+<p>通过FFT处理过的音频信号可以让我们清晰的观察到频率区间上的能量变化。但是人类听力并不是对所有频率波段都敏感，人类听力对低频更加敏感。</p>
+
+<p>基于这个特点，建模人类听力对高低频倾向的这个特性有助于提升语音识别性能。工程上实现这个目的，通过将原始声学频率转换成梅尔频率。转换公式如下：
+\(mel(f)\, =\, 1127\, ln(1\, +\, \frac {f} {700})\)
+使用一系列的梅尔滤波器采集每个频率波段的能量，并对其取对数。这使得梅尔滤波组后的频谱信号在低频信号分辨率更高，在高频信号分辨率低。即很好的建模了上述所说的人听力的特性。</p>
+
+<p><img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-mel-fbank.png" alt="" /></p>
+
+<p>​				     (Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky &amp; James H. Martin 2023</a>)</p>
+
+<p>通过以上步骤，麦克风或电话采集到的音频信号，通过采样量化、加窗、离散傅里叶变换、梅尔频谱滤波就可以转换成更具有辨识读的声学频谱信号。这样的声学信号便可用于后续的特征建模，比如用DL模型建模。</p>
+
+<p>Fbank声学特征提取计算示例，  一个50ms的PCM音频数据，s16le编码，采样率（sample_rate）= 16000，  帧长度（frame_length)=25ms、帧移（frame_shift）=10ms 和Mel滤波器的数量（num_mel_bins）= 80。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>则：
+总采样数 = 50ms * (16000 / 1000) = 800个
+
+帧长度采样点数 = 16000 * 0.025  // 25ms = 400， 即一个窗口长度为400个采样点
+帧移采样点数 = 16000 * 0.01  // 10ms  = 160， 即每次偏移160个采样点
+
+帧数量 = (总采样点数 - 帧长度采样点数) / 帧移采样点数 + 1
+       = (800 - 400) / 160 + 1
+       = 5
+因此一个50ms的音频数据，如上参数得到的fbank特征为5x80；
+</code></pre></div></div>
+
+<p>python计算工具</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import torchaudio.compliance.kaldi as kaldi
+feats = kaldi.fbank(wave_tensor,
+                      num_mel_bins=self.num_mel_bins,
+                      frame_length=self.frame_length,
+                      frame_shift=self.frame_shift,
+                      dither=0.0,
+                      energy_floor=0.0,
+                      window_type='hamming',
+                      sample_frequency=self.sample_rate)
+</code></pre></div></div>
+
+<p>备注</p>
+
+<blockquote>
+  <p>尽管使用更高的采样率(sample rate)获得更高的ASR准确率，但实际应用中我们不能使用一个ASR模型同时训练和测试不同的采样率。</p>
+</blockquote>
+
+<p>所以一般8k,16k的音频会分开处理。</p>
+
+<blockquote>
+  <p>8k采样率的音频主要用于电话音频，16k采样率的音频主要用于麦克风音频。</p>
+</blockquote>]]></content><author><name></name></author><category term="speech" /><category term="asr" /><summary type="html"><![CDATA[我们都在物理课上听过老师敲击音叉的声音，声音是一种由物体或物质振动产生的机械波，通过介质（如空气、水或固体）传播的能量。当物体振动时，它会引起周围介质的分子或粒子的振动。这些振动以波的形式传播，形成声音波。]]></summary></entry><entry><title type="html">SPEECH: 如何构建语音唤醒系统</title><link href="http://localhost:4000/speech/kws/2024/03/22/speech-kws-system.html" rel="alternate" type="text/html" title="SPEECH: 如何构建语音唤醒系统" /><published>2024-03-22T14:48:11+08:00</published><updated>2024-03-22T14:48:11+08:00</updated><id>http://localhost:4000/speech/kws/2024/03/22/speech-kws-system</id><content type="html" xml:base="http://localhost:4000/speech/kws/2024/03/22/speech-kws-system.html"><![CDATA[<p>语音唤醒系统（Voice Wake-up System，也称为关键词唤醒系统，Keyword Spotting System）是一种语音识别技术，用于检测和识别特定的唤醒词（通常是一个预定义的关键词或短语），从而激活设备进行进一步的语音交互。这种系统广泛应用于智能手机、智能音箱、车载系统等设备中。</p>
+
+<h3 id="工作原理">工作原理</h3>
+
+<ol>
+  <li><strong>音频捕捉</strong>：
+    <ul>
+      <li>系统通过麦克风持续捕捉环境中的音频信号。</li>
+    </ul>
+  </li>
+  <li><strong>信号处理</strong>：
+    <ul>
+      <li>对捕捉到的音频信号进行预处理，如降噪、归一化等，以提高信号的质量。</li>
+    </ul>
+  </li>
+  <li><strong>特征提取</strong>：
+    <ul>
+      <li>从预处理后的音频信号中提取特征，常用的特征包括MFCC（Mel频率倒谱系数）、滤波器组能量等。</li>
+    </ul>
+  </li>
+  <li><strong>模型预测</strong>：
+    <ul>
+      <li>将提取的特征输入到预先训练好的模型中进行预测。常用的模型包括：
+        <ul>
+          <li><strong>深度神经网络（DNN）</strong>：包括卷积神经网络（CNN）、循环神经网络（RNN）等。</li>
+          <li><strong>传统机器学习模型</strong>：如隐马尔可夫模型（HMM）、支持向量机（SVM）等。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>决策</strong>：
+    <ul>
+      <li>基于模型的输出，系统判断是否检测到唤醒词。如果检测到，则激活设备进入下一步的语音交互阶段。</li>
+    </ul>
+  </li>
+</ol>]]></content><author><name></name></author><category term="speech" /><category term="kws" /><summary type="html"><![CDATA[语音唤醒系统（Voice Wake-up System，也称为关键词唤醒系统，Keyword Spotting System）是一种语音识别技术，用于检测和识别特定的唤醒词（通常是一个预定义的关键词或短语），从而激活设备进行进一步的语音交互。这种系统广泛应用于智能手机、智能音箱、车载系统等设备中。]]></summary></entry><entry><title type="html">LLM: 大语言模型——如何构建词表(Tokenizer)</title><link href="http://localhost:4000/jekyll/update/2023/08/14/llama2.c.zh.html" rel="alternate" type="text/html" title="LLM: 大语言模型——如何构建词表(Tokenizer)" /><published>2023-08-14T14:48:11+08:00</published><updated>2023-08-14T14:48:11+08:00</updated><id>http://localhost:4000/jekyll/update/2023/08/14/llama2.c.zh</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2023/08/14/llama2.c.zh.html"><![CDATA[<p><code class="language-plaintext highlighter-rouge">Modify vocabulary</code></p>
 
 <p>As shown below, the original llama2-en mainly sample with english corpus, and llama2_ enzh forms a new 52k vocabulary by adding Chinese corpus statistics and merging the original vocabulary.</p>
 
@@ -61,7 +306,7 @@
   <li>
     <p><a href="https://github.com/bojone/t5_in_bert4keras/blob/6cf50dbf3ffd3b4e9f36a59ee9f98356cf686de0/tokenizer/reduce.py">toknizer reduce</a></p>
   </li>
-</ul>]]></content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"><![CDATA[Modify vocabulary]]></summary></entry><entry><title type="html">如何使用Jekyll搭建个人博客？</title><link href="http://localhost:4000/tools/2023/04/19/how-to-build-website.html" rel="alternate" type="text/html" title="如何使用Jekyll搭建个人博客？" /><published>2023-04-19T14:45:13+08:00</published><updated>2023-04-19T14:45:13+08:00</updated><id>http://localhost:4000/tools/2023/04/19/how-to-build-website</id><content type="html" xml:base="http://localhost:4000/tools/2023/04/19/how-to-build-website.html"><![CDATA[<style>  
+</ul>]]></content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"><![CDATA[Modify vocabulary]]></summary></entry><entry><title type="html">TOOL: 如何使用Jekyll搭建个人博客？</title><link href="http://localhost:4000/tools/2023/04/19/how-to-build-website.html" rel="alternate" type="text/html" title="TOOL: 如何使用Jekyll搭建个人博客？" /><published>2023-04-19T14:45:13+08:00</published><updated>2023-04-19T14:45:13+08:00</updated><id>http://localhost:4000/tools/2023/04/19/how-to-build-website</id><content type="html" xml:base="http://localhost:4000/tools/2023/04/19/how-to-build-website.html"><![CDATA[<style>  
   /* 可选样式，为名言添加一些基本的样式 */  
   .quote {  
     font-family: 'SimSun', serif; /* 使用常见的中文字体 */  
@@ -91,18 +336,30 @@
 
 <p>上承先贤之志，积跬步至千里，积小流成江海，用心专一。</p>
 
+<hr />
+
 <h1> 如何使用Jekyll搭建个人博客 </h1>
 
 <p><strong>Jekyll</strong> 是一个简单的博客形态的静态站点生产机器。它有一个模版目录，其中包含原始文本格式的文档，通过一个转换器（如Markdown）和我们的Liquid渲染器转化成一个完整的可发布的静态网站，你可以发布在任何你喜爱的服务器上。Jekyll 也可以运行在GitHub Page上，也就是说，你可以使用 GitHub 的服务来搭建你的项目页面、博客或者网站，而且是完全免费的。</p>
 
+<hr />
 <h2> 本地环境准备 </h2>
 
 <p>rubgem的安装可参考官网<a href="https://rubygems.org/pages/download">Download RubyGems</a></p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcc, g++ &gt;=5.4.0
-sudo add-apt-repository ppa:brightbox/ruby-ng
-sudo apt-get update
-sudo apt-get install ruby2.6 ruby2.6-dev
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt update
+sudo apt install ruby-full
+
+# 添加 TUNA 源并移除默认源
+gem sources --add https://mirrors.tuna.tsinghua.edu.cn/rubygems/ --remove https://rubygems.org/
+# 列出已有源
+gem sources -l
+# 应该只有 TUNA 一个
+
+#配置bundle的国内源 
+bundle config mirror.https://rubygems.org https://mirrors.tuna.tsinghua.edu.cn/rubygems
+
 最后 &gt;&gt; gem install jekyll, bundler
+如果要安装指定版本 gem install bundler -v 2.4.12 #安装指定版本的bundler
 </code></pre></div></div>
 
 <p>最后确认下各依赖软件版本</p>
@@ -115,6 +372,7 @@ bundler -v　 | bundler-2.4.12
 jekyll -v　　 |　　jekyll 4.3.2
 </code></pre></div></div>
 
+<hr />
 <h2> 本地创建jekyll项目 </h2>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>本地新建jekyll项目测试，命令行
@@ -129,6 +387,7 @@ jekyll -v　　 |　　jekyll 4.3.2
   </blockquote>
 </blockquote>
 
+<hr />
 <h2> 项目推送到github上 </h2>
 
 <p>将Jekyll构建的静态网站 推到github上托管运行起来，个人博客网站就可以在公网访问。新建一个工程，设置好名称
@@ -168,6 +427,35 @@ _site/jekyll/
         └── 03
             └── 22
                 └── keyword-spotting.html
+</code></pre></div></div>
+
+<h2> 本地迁移静态网站 </h2>
+<p>如果本地工程目录project，从一个构建环境，移动到另外一个构建环境。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>要使用更新版本的 Jekyll 和 Bundle 更新您的原始静态网站，您可以按照以下步骤进行操作：
+
+1. 进入项目目录：打开命令行终端，并进入包含您原始静态网站的项目目录。 &gt;&gt; cd /project
+
+2. 更新 Gemfile：检查项目目录中的 Gemfile 文件，确保其中的 Jekyll 和其他依赖项版本指定为您想要使用的最新版本。如果需要，您可以手动编辑 Gemfile 文件，将版本号更新为您想要使用的最新版本。
+
+3. 更新依赖项：执行以下命令，使用最新的 Gemfile 更新项目的依赖项：
+
+   bundle update
+
+   这将根据您在 Gemfile 中指定的版本要求，更新项目所需的 Gem 包到最新版本。
+
+4. 构建静态网站：执行以下命令，使用更新后的 Jekyll 和依赖项构建您的静态网站：
+
+   bundle exec jekyll build
+
+   这将使用最新版本的 Jekyll 和依赖项生成更新后的静态网站。
+
+6. 部署或本地运行：根据您的需求，将更新后的静态网站部署到服务器上，或者在本地运行开发服务器进行预览：
+
+   bundle exec jekyll serve
+
+   这将启动 Jekyll 的开发服务器，并在本地主机上运行您的静态网站，以便您可以在浏览器中进行预览和测试。
+
 </code></pre></div></div>
 
 <h2> 总结</h2>

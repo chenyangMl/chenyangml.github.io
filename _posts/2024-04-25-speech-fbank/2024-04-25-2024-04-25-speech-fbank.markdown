@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "音频声学特征提取"
+title:  "SPEECH: 音频声学特征提取"
 date:   2024-04-25 14:48:11 +0800
 categories: speech asr
 ---
