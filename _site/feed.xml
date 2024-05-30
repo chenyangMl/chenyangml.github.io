@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-05-30T14:17:21+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chen Yang’s Blog</title><subtitle>Machine learning Engineer. Focusing on computer vision and natural language processing.</subtitle><entry><title type="html">SPEECH: 音频声学特征提取</title><link href="http://localhost:4000/speech/asr/2024/04/25/2024-04-25-speech-fbank.html" rel="alternate" type="text/html" title="SPEECH: 音频声学特征提取" /><published>2024-04-25T14:48:11+08:00</published><updated>2024-04-25T14:48:11+08:00</updated><id>http://localhost:4000/speech/asr/2024/04/25/2024-04-25-speech-fbank</id><content type="html" xml:base="http://localhost:4000/speech/asr/2024/04/25/2024-04-25-speech-fbank.html"><![CDATA[<p>我们都在物理课上听过老师敲击音叉的声音，声音是一种由物体或物质振动产生的机械波，通过介质（如空气、水或固体）传播的能量。当物体振动时，它会引起周围介质的分子或粒子的振动。这些振动以波的形式传播，形成声音波。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-05-30T14:29:24+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chen Yang’s Blog</title><subtitle>Machine learning Engineer. Focusing on computer vision and natural language processing.</subtitle><entry><title type="html">SPEECH: 音频声学特征提取</title><link href="http://localhost:4000/speech/asr/2024/04/25/2024-04-25-speech-fbank.html" rel="alternate" type="text/html" title="SPEECH: 音频声学特征提取" /><published>2024-04-25T14:48:11+08:00</published><updated>2024-04-25T14:48:11+08:00</updated><id>http://localhost:4000/speech/asr/2024/04/25/2024-04-25-speech-fbank</id><content type="html" xml:base="http://localhost:4000/speech/asr/2024/04/25/2024-04-25-speech-fbank.html"><![CDATA[<p>我们都在物理课上听过老师敲击音叉的声音，声音是一种由物体或物质振动产生的机械波，通过介质（如空气、水或固体）传播的能量。当物体振动时，它会引起周围介质的分子或粒子的振动。这些振动以波的形式传播，形成声音波。</p>
 
 <p>声音波的特征包括以下几个方面：</p>
 
@@ -15,9 +15,10 @@
 
 <h2 id="pcm数据格式">PCM数据格式</h2>
 
-<p><img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/PCM_Encoded_signal.png" alt="" /></p>
-
-<p>​							                                  (Image source: <a href="https://recoverit.wondershare.fr/file-tips/pcm-raw.html">PCM-RAW</a>)</p>
+<div style="text-align: center;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/PCM_Encoded_signal.png" style="width: 100%; margin-bottom: 20px;" />
+    <p>Image source: <a href="https://recoverit.wondershare.fr/file-tips/pcm-raw.html">PCM-RAW</a></p>
+</div>
 
 <p>上图示例一段连续音频数据如何离散采样成PCM格式的音频数据的过程。</p>
 

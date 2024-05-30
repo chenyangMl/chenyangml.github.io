@@ -28,9 +28,12 @@ categories: speech asr
 
 ## PCM数据格式
 
-![](https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/PCM_Encoded_signal.png)
+<div style="text-align: center;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/PCM_Encoded_signal.png" style="width: 100%; margin-bottom: 20px;">
+    <p>Image source: <a href="https://recoverit.wondershare.fr/file-tips/pcm-raw.html">PCM-RAW</a></p>
+</div>
 
-​							                                  (Image source: [PCM-RAW](https://recoverit.wondershare.fr/file-tips/pcm-raw.html))
+
 
 上图示例一段连续音频数据如何离散采样成PCM格式的音频数据的过程。
 
