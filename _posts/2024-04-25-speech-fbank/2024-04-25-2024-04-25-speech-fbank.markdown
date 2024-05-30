@@ -29,7 +29,7 @@ categories: speech asr
 ## PCM数据格式
 
 <div style="text-align: center;">
-    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/PCM_Encoded_signal.png" style="width: 100%; margin-bottom: 20px;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/PCM_Encoded_signal.png" style="width: 60%%; height: auto； margin-bottom: 20px;">
     <p>Image source: <a href="https://recoverit.wondershare.fr/file-tips/pcm-raw.html">PCM-RAW</a></p>
 </div>
 
