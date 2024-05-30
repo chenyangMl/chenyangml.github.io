@@ -20,19 +20,18 @@ categories: speech asr
 
 
 
+------
+
+
 # 音频数据格式
-
-
-
 
 
 ## PCM数据格式
 
 <div style="text-align: center;">
-    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/PCM_Encoded_signal.png" style="width: 60%%; height: auto； margin-bottom: 20px;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/PCM_Encoded_signal.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
     <p>Image source: <a href="https://recoverit.wondershare.fr/file-tips/pcm-raw.html">PCM-RAW</a></p>
 </div>
-
 
 
 上图示例一段连续音频数据如何离散采样成PCM格式的音频数据的过程。
@@ -107,9 +106,9 @@ b'#!AMRWB\x0aD\xfb\x12\x04\xaa5\x1cp\x11\xfb\xf39\x90\xd6:^\xe3,\x9d\xaa\xa8w\xe
 
 
 
-## [OPUS音频格式](https://opus-codec.org/)
+## OPUS音频格式
 
-Opus is a totally open, royalty-free, highly versatile audio codec. Opus is unmatched for interactive speech and music transmission over the Internet, but is also intended for storage and streaming applications. It is standardized by the Internet Engineering Task Force (IETF) as [RFC 6716](https://tools.ietf.org/html/rfc6716) which incorporated technology from Skype’s SILK codec and Xiph.Org’s CELT codec.
+[Opus](https://opus-codec.org/) is a totally open, royalty-free, highly versatile audio codec. Opus is unmatched for interactive speech and music transmission over the Internet, but is also intended for storage and streaming applications. It is standardized by the Internet Engineering Task Force (IETF) as [RFC 6716](https://tools.ietf.org/html/rfc6716) which incorporated technology from Skype’s SILK codec and Xiph.Org’s CELT codec.
 
 不通的音频格式是用于存储音频数据，如果我们要对音频做建模，识别音频中的内容，还需要对音频做声学特征提取。
 
@@ -123,9 +122,12 @@ ASR的第一步是将波形转换成一系列的声学特征向量。每个特�
 
 声音是物体振动产生的声波。下面这个声波记录的是英文单词'baby'最后一个元音'[iy]'的发音声波，x轴是时间，y轴表示声压的强弱变化。声压就是发声的时候产生的大于或小于标准大气压的情况。
 
-![](https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-waveform.png)
 
-​         (Image source: [Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023](https://web.stanford.edu/~jurafsky/slp3/16.pdf))
+<div style="text-align: center;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-waveform.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
+    <p>Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023</a></p>
+</div>
+
 
 
 
@@ -153,9 +155,11 @@ $$
 
 下图展示的就是使用rectangular, window size为25ms, frame shift为10ms的加窗处理过程。从图上看，加窗后的音频信号和原信号基本一致。
 
-![](https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-windowing.png)
+<div style="text-align: center;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-windowing.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
+    <p>Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023</a></p>
+</div>
 
-​				     (Image source: [Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023](https://web.stanford.edu/~jurafsky/slp3/16.pdf))
 
 信号的计算过程如下，新信号等于当前时刻n的信号值s[n] 乘以加窗后的信号值w[n]。
 $$
@@ -182,19 +186,20 @@ $$
 \end{equation}
 $$
 
-![](https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-windowing-shape.png)
-
-​				     (Image source: [Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023](https://web.stanford.edu/~jurafsky/slp3/16.pdf))
-
+<div style="text-align: center;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-windowing-shape.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
+    <p>Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023</a></p>
+</div>
 
 
 ## 3 离散傅里叶变换(Discrete Fourier Transform)
 
 下面一步是使用离散傅里叶变换提取加窗后信号的频谱信息。目的是为了知道不同频率波段音频信号包含的能量多少。下图展示的就是(a)一个25ms Huamming 加窗处理的音频信号片段,通过傅里叶变换得到频谱信息(b)。我们从频谱信号图(b)上就可以清晰的看到一个声音[iy]片段，在0~8000hz的频率区间内，它的强弱变化。
 
-![](https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-DFT.png)
-
-​				     (Image source: [Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023](https://web.stanford.edu/~jurafsky/slp3/16.pdf))
+<div style="text-align: center;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-DFT.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
+    <p>Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023</a></p>
+</div>
 
 一个常用的计算DFT的算法是快速傅里叶变换(FFT)。
 
@@ -210,9 +215,10 @@ mel(f)\, =\, 1127\, ln(1\, +\, \frac {f} {700})
 $$
 使用一系列的梅尔滤波器采集每个频率波段的能量，并对其取对数。这使得梅尔滤波组后的频谱信号在低频信号分辨率更高，在高频信号分辨率低。即很好的建模了上述所说的人听力的特性。
 
-![](https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-mel-fbank.png)
-
-​				     (Image source: [Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023](https://web.stanford.edu/~jurafsky/slp3/16.pdf))
+<div style="text-align: center;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-mel-fbank.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
+    <p>Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023</a></p>
+</div>
 
 
 

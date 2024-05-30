@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-05-30T14:29:24+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chen Yang’s Blog</title><subtitle>Machine learning Engineer. Focusing on computer vision and natural language processing.</subtitle><entry><title type="html">SPEECH: 音频声学特征提取</title><link href="http://localhost:4000/speech/asr/2024/04/25/2024-04-25-speech-fbank.html" rel="alternate" type="text/html" title="SPEECH: 音频声学特征提取" /><published>2024-04-25T14:48:11+08:00</published><updated>2024-04-25T14:48:11+08:00</updated><id>http://localhost:4000/speech/asr/2024/04/25/2024-04-25-speech-fbank</id><content type="html" xml:base="http://localhost:4000/speech/asr/2024/04/25/2024-04-25-speech-fbank.html"><![CDATA[<p>我们都在物理课上听过老师敲击音叉的声音，声音是一种由物体或物质振动产生的机械波，通过介质（如空气、水或固体）传播的能量。当物体振动时，它会引起周围介质的分子或粒子的振动。这些振动以波的形式传播，形成声音波。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-05-30T14:46:33+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chen Yang’s Blog</title><subtitle>Machine learning Engineer. Focusing on computer vision and natural language processing.</subtitle><entry><title type="html">SPEECH: 音频声学特征提取</title><link href="http://localhost:4000/speech/asr/2024/04/25/2024-04-25-speech-fbank.html" rel="alternate" type="text/html" title="SPEECH: 音频声学特征提取" /><published>2024-04-25T14:48:11+08:00</published><updated>2024-04-25T14:48:11+08:00</updated><id>http://localhost:4000/speech/asr/2024/04/25/2024-04-25-speech-fbank</id><content type="html" xml:base="http://localhost:4000/speech/asr/2024/04/25/2024-04-25-speech-fbank.html"><![CDATA[<p>我们都在物理课上听过老师敲击音叉的声音，声音是一种由物体或物质振动产生的机械波，通过介质（如空气、水或固体）传播的能量。当物体振动时，它会引起周围介质的分子或粒子的振动。这些振动以波的形式传播，形成声音波。</p>
 
 <p>声音波的特征包括以下几个方面：</p>
 
@@ -11,12 +11,14 @@
 
 <p>人类通过耳朵来感知声音。当声音波到达耳朵时，它们会引起耳膜和耳内的细小结构振动。随后，这些振动通过听觉神经传递到大脑，被解释为具有特定频率、振幅和波形的声音。</p>
 
+<hr />
+
 <h1 id="音频数据格式">音频数据格式</h1>
 
 <h2 id="pcm数据格式">PCM数据格式</h2>
 
 <div style="text-align: center;">
-    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/PCM_Encoded_signal.png" style="width: 100%; margin-bottom: 20px;" />
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/PCM_Encoded_signal.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;" />
     <p>Image source: <a href="https://recoverit.wondershare.fr/file-tips/pcm-raw.html">PCM-RAW</a></p>
 </div>
 
@@ -101,9 +103,9 @@ b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>b'#!AMRWB\x0aD\xfb\x12\x04\xaa5\x1cp\x11\xfb\xf39\x90\xd6:^\xe3,\x9d\xaa\xa8w\xeb\xed\xf3\x98_\xa9\x96Nw\xad\xb6]\x1cmG\xab\x05\x97\xfd\x8bZT)\xff7\x7f\xe9\xa1!'
 </code></pre></div></div>
 
-<h2 id="opus音频格式"><a href="https://opus-codec.org/">OPUS音频格式</a></h2>
+<h2 id="opus音频格式">OPUS音频格式</h2>
 
-<p>Opus is a totally open, royalty-free, highly versatile audio codec. Opus is unmatched for interactive speech and music transmission over the Internet, but is also intended for storage and streaming applications. It is standardized by the Internet Engineering Task Force (IETF) as <a href="https://tools.ietf.org/html/rfc6716">RFC 6716</a> which incorporated technology from Skype’s SILK codec and Xiph.Org’s CELT codec.</p>
+<p><a href="https://opus-codec.org/">Opus</a> is a totally open, royalty-free, highly versatile audio codec. Opus is unmatched for interactive speech and music transmission over the Internet, but is also intended for storage and streaming applications. It is standardized by the Internet Engineering Task Force (IETF) as <a href="https://tools.ietf.org/html/rfc6716">RFC 6716</a> which incorporated technology from Skype’s SILK codec and Xiph.Org’s CELT codec.</p>
 
 <p>不通的音频格式是用于存储音频数据，如果我们要对音频做建模，识别音频中的内容，还需要对音频做声学特征提取。</p>
 
@@ -115,9 +117,10 @@ b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x
 
 <p>声音是物体振动产生的声波。下面这个声波记录的是英文单词’baby’最后一个元音’[iy]’的发音声波，x轴是时间，y轴表示声压的强弱变化。声压就是发声的时候产生的大于或小于标准大气压的情况。</p>
 
-<p><img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-waveform.png" alt="" /></p>
-
-<p>​         (Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky &amp; James H. Martin 2023</a>)</p>
+<div style="text-align: center;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-waveform.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;" />
+    <p>Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky &amp; James H. Martin 2023</a></p>
+</div>
 
 <h2 id="1-采样sampling和量化quantization">1 采样(Sampling)和量化(Quantization)</h2>
 
@@ -141,9 +144,10 @@ b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x
 
 <p>下图展示的就是使用rectangular, window size为25ms, frame shift为10ms的加窗处理过程。从图上看，加窗后的音频信号和原信号基本一致。</p>
 
-<p><img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-windowing.png" alt="" /></p>
-
-<p>​				     (Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky &amp; James H. Martin 2023</a>)</p>
+<div style="text-align: center;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-windowing.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;" />
+    <p>Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky &amp; James H. Martin 2023</a></p>
+</div>
 
 <p>信号的计算过程如下，新信号等于当前时刻n的信号值s[n] 乘以加窗后的信号值w[n]。
 \(y[n]\, =\, w[n]s[n]\)
@@ -164,17 +168,19 @@ Rectangular和Hamming窗的区别，Rectangular窗直接在边界位置切断，
 \end{cases}
 \end{equation}\]
 
-<p><img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-windowing-shape.png" alt="" /></p>
-
-<p>​				     (Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky &amp; James H. Martin 2023</a>)</p>
+<div style="text-align: center;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-windowing-shape.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;" />
+    <p>Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky &amp; James H. Martin 2023</a></p>
+</div>
 
 <h2 id="3-离散傅里叶变换discrete-fourier-transform">3 离散傅里叶变换(Discrete Fourier Transform)</h2>
 
 <p>下面一步是使用离散傅里叶变换提取加窗后信号的频谱信息。目的是为了知道不同频率波段音频信号包含的能量多少。下图展示的就是(a)一个25ms Huamming 加窗处理的音频信号片段,通过傅里叶变换得到频谱信息(b)。我们从频谱信号图(b)上就可以清晰的看到一个声音[iy]片段，在0~8000hz的频率区间内，它的强弱变化。</p>
 
-<p><img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-DFT.png" alt="" /></p>
-
-<p>​				     (Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky &amp; James H. Martin 2023</a>)</p>
+<div style="text-align: center;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-DFT.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;" />
+    <p>Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky &amp; James H. Martin 2023</a></p>
+</div>
 
 <p>一个常用的计算DFT的算法是快速傅里叶变换(FFT)。</p>
 
@@ -186,9 +192,10 @@ Rectangular和Hamming窗的区别，Rectangular窗直接在边界位置切断，
 \(mel(f)\, =\, 1127\, ln(1\, +\, \frac {f} {700})\)
 使用一系列的梅尔滤波器采集每个频率波段的能量，并对其取对数。这使得梅尔滤波组后的频谱信号在低频信号分辨率更高，在高频信号分辨率低。即很好的建模了上述所说的人听力的特性。</p>
 
-<p><img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-mel-fbank.png" alt="" /></p>
-
-<p>​				     (Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky &amp; James H. Martin 2023</a>)</p>
+<div style="text-align: center;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-mel-fbank.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;" />
+    <p>Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky &amp; James H. Martin 2023</a></p>
+</div>
 
 <p>通过以上步骤，麦克风或电话采集到的音频信号，通过采样量化、加窗、离散傅里叶变换、梅尔频谱滤波就可以转换成更具有辨识读的声学频谱信号。这样的声学信号便可用于后续的特征建模，比如用DL模型建模。</p>
 
