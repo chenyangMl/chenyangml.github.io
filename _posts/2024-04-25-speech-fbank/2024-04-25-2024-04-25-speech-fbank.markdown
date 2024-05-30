@@ -5,7 +5,7 @@ date:   2024-04-25 14:48:11 +0800
 categories: speech asr
 ---
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
 
 我们都在物理课上听过老师敲击音叉的声音，声音是一种由物体或物质振动产生的机械波，通过介质（如空气、水或固体）传播的能量。当物体振动时，它会引起周围介质的分子或粒子的振动。这些振动以波的形式传播，形成声音波。
 
@@ -25,44 +25,45 @@ categories: speech asr
 
 # 音频数据格式
 
-
 ## PCM数据格式
 
+下图示例一段连续音频数据如何离散采样成PCM音频格式的示例过程。图上部分是原始声波(随着时间的声音振动信号)，下面则是采样量化后的PCM编码信号。
+
 <div style="text-align: center;">
-    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/PCM_Encoded_signal.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-speech-fbank/PCM_Encoded_signal.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
     <p>Image source: <a href="https://recoverit.wondershare.fr/file-tips/pcm-raw.html">PCM-RAW</a></p>
 </div>
+下面介绍音频采样量化过程中几个关键名词:
 
+**采样频率(Sample Rate)**： 即音频离散采样的频率,指每秒钟取得声音样本的次数。采样频率越高,声音的质量也就越好,声音的还原也就越真实，但同时它占的资源比较多。语音识别中一般使用8000, 16000的采样率，如sample reate=8000表示1秒连续音频会被采样成8000个数据样本。
 
-上图示例一段连续音频数据如何离散采样成PCM格式的音频数据的过程。
+**采样位深(Sample Depths)**：即采样值(音波幅度的量化值)，它是用来衡量声音波动变化的一个参数，也可以说是声卡的分辨率，一般会用8、16、20、24bits表示。如sample depth=16bit，表示每一个采样出来的样本需要使用16bit来记录其波动浮动。
 
+**声道数(Channels)**：有单声道和立体声(多通道)。做ASR识别用的是单声道。
 
-
-采样频率(Sample Rate)： 即音频离散采样的频率,指每秒钟取得声音样本的次数。采样频率越高,声音的质量也就越好,声音的还原也就越真实，但同时它占的资源比较多。语音识别中一般使用8000, 16000的采样率，如sample reate=8000表示1秒连续音频会被采样成8000个数据样本。
-
-采样位深(Sample Depths)：即采样值(音波幅度的量化值)，它是用来衡量声音波动变化的一个参数，也可以说是声卡的分辨率，一般会用8、16、20、24bits表示。如sample depth=16bit，表示每一个采样出来的样本需要使用16bit来记录其波动浮动。
-
-声道数(Channels)：有单声道和立体声(多通道)。做ASR识别用的是单声道。
-
-时长(Duration):  采样的音频数据的时长。
+**时长(Duration)**:  采样的音频数据的时长。
 
 
 
-如: 一个60s的PCM音频，采样频率为16k(即每秒钟16000个样本), 采样位数为16bit(表示一个样本占用16bit, 即2个bytes)，单声道。
+**示例1: 一个60s的PCM音频，采样频率为16k(即每秒钟16000个样本), 采样位数为16bit(表示一个样本占用16bit, 即2个bytes)，单声道。**
 
+```
 则存储量(bytes) = (采样频率 × 采样位数/8） × 声道 × 时间 = （sample_rate x sample_bit / 2） x channel x time.
 
 存储量 = (16000 * 16 / 8 ) * 1 * 60 / 1024 / 1024 = 1.8310546875 M Bytes
 
 1ms 包含 16000 / 1000个样本，占用16*16/8 = 32bytes。
+```
 
 
 
-如：已知PCM音频数据大小为57708bytes, 其sample_rate=16k, sample_bit=16, channel=1。则该段音频
+**示例2：已知PCM音频数据大小为57708bytes, 其sample_rate=16k, sample_bit=16, channel=1。则该段音频**
 
+```
 样本数量samples = 57708 / (16 / 8)  / 1 = 28854 (个)。
 
 音频时长duration = samples / 16000 =  1.803375 （秒）
+```
 
 
 
@@ -124,7 +125,7 @@ ASR的第一步是将波形转换成一系列的声学特征向量。每个特�
 
 
 <div style="text-align: center;">
-    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-waveform.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-speech-fbank/fbank-waveform.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
     <p>Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023</a></p>
 </div>
 
@@ -136,9 +137,9 @@ ASR的第一步是将波形转换成一系列的声学特征向量。每个特�
 量化： 用一个整数来表示声波在采样时刻下的振幅(Amplitude)，比如使用8bit(-128~127)，16bit(-32768~32767)来表示。
 
 如下是一个Linear PCM公式
-$$
-F(x)=\frac {sgn(x)\, log(1\, +\mu |x|\, )} {log(1\, +\, \mu )}\, \, \, \, -1\, \leq x\leq 1
-$$
+
+
+<p>This is the formula: \(F(x) = \frac{{\text{{sgn}}(x) \cdot \log(1 + \mu \lvert x \rvert)}}{{\log(1 + \mu)}}\), \(-1 \leq x \leq 1\)</p>
 其中µ=255，如果是8bit量化。通过采样和量化过程，就可以把连续声波信号转换为离散的数字信号。(计算机可以表征的数字)
 
 
@@ -156,7 +157,7 @@ $$
 下图展示的就是使用rectangular, window size为25ms, frame shift为10ms的加窗处理过程。从图上看，加窗后的音频信号和原信号基本一致。
 
 <div style="text-align: center;">
-    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-windowing.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-speech-fbank/fbank-windowing.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
     <p>Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023</a></p>
 </div>
 
@@ -187,7 +188,7 @@ $$
 $$
 
 <div style="text-align: center;">
-    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-windowing-shape.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-speech-fbank/fbank-windowing-shape.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
     <p>Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023</a></p>
 </div>
 
@@ -197,7 +198,7 @@ $$
 下面一步是使用离散傅里叶变换提取加窗后信号的频谱信息。目的是为了知道不同频率波段音频信号包含的能量多少。下图展示的就是(a)一个25ms Huamming 加窗处理的音频信号片段,通过傅里叶变换得到频谱信息(b)。我们从频谱信号图(b)上就可以清晰的看到一个声音[iy]片段，在0~8000hz的频率区间内，它的强弱变化。
 
 <div style="text-align: center;">
-    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-DFT.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-speech-fbank/fbank-DFT.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
     <p>Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023</a></p>
 </div>
 
@@ -216,7 +217,7 @@ $$
 使用一系列的梅尔滤波器采集每个频率波段的能量，并对其取对数。这使得梅尔滤波组后的频谱信号在低频信号分辨率更高，在高频信号分辨率低。即很好的建模了上述所说的人听力的特性。
 
 <div style="text-align: center;">
-    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-kws-audio-process/fbank-mel-fbank.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
+    <img src="https://github.com/chenyangMl/chenyangml.github.io/raw/main/_posts/2024-04-25-speech-fbank/fbank-mel-fbank.jpg" style="width: 60%%; height: auto； margin-bottom: 20px;">
     <p>Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky & James H. Martin 2023</a></p>
 </div>
 
