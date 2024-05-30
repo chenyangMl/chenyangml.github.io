@@ -47,7 +47,7 @@
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" async=""></script>
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 <p>我们都在物理课上听过老师敲击音叉的声音，声音是一种由物体或物质振动产生的机械波，通过介质（如空气、水或固体）传播的能量。当物体振动时，它会引起周围介质的分子或粒子的振动。这些振动以波的形式传播，形成声音波。</p>
 
@@ -182,7 +182,8 @@ b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x
 
 <p>如下是一个Linear PCM公式</p>
 
-<p>This is the formula: \(F(x) = \frac(x) \cdot \log(1 + \mu \lvert x \rvert)}}\), \(-1 \leq x \leq 1\)</p>
+\[F(x)=\frac {sgn(x)\, log(1\, +\mu |x|\, )} {log(1\, +\, \mu )}\, \, \, \, -1\, \leq x\leq 1\]
+
 <p>其中µ=255，如果是8bit量化。通过采样和量化过程，就可以把连续声波信号转换为离散的数字信号。(计算机可以表征的数字)</p>
 
 <h2 id="2-加窗--windowing-">2 加窗 ( Windowing )</h2>
@@ -204,16 +205,19 @@ b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x
     <p>Image source: <a href="https://web.stanford.edu/~jurafsky/slp3/16.pdf">Speech and Language Processing. Daniel Jurafsky &amp; James H. Martin 2023</a></p>
 </div>
 
-<p>信号的计算过程如下，新信号等于当前时刻n的信号值s[n] 乘以加窗后的信号值w[n]。
-\(y[n]\, =\, w[n]s[n]\)
-Rectangular和Hamming窗的区别，Rectangular窗直接在边界位置切断，在此基础上做傅里叶变换时会引起问题。基于这个原因，对于声学特征提取，我们更常用Hamming窗。Hamming窗在窗口边界位置缩放信号值趋近于零，能避免不连续问题。下图展示了两种加窗形式，下面是两者的公式(L表示帧数量)。
-\(\begin{equation}
+<p>信号的计算过程如下，新信号等于当前时刻n的信号值s[n] 乘以加窗后的信号值w[n]。</p>
+
+\[y[n]\, =\, w[n]s[n]\]
+
+<p>Rectangular和Hamming窗的区别，Rectangular窗直接在边界位置切断，在此基础上做傅里叶变换时会引起问题。基于这个原因，对于声学特征提取，我们更常用Hamming窗。Hamming窗在窗口边界位置缩放信号值趋近于零，能避免不连续问题。下图展示了两种加窗形式，下面是两者的公式(L表示帧数量)。</p>
+
+\[\begin{equation}
 \text{rectangular} \quad w[n] = 
 \begin{cases} 
 1 &amp; 0 \leq n \leq L-1 \\
 0 &amp; \text{otherwise}
 \end{cases}
-\end{equation}\)</p>
+\end{equation}\]
 
 \[\begin{equation}
 \text{Hamming} \quad w[n] = 
